@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Selectron</title>
+	<link rel="Stylesheet" type="text/css" href="demo.css" />
+	<link rel="Stylesheet" type="text/css" href="selectron.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<!-- <script type="text/javascript" src="jquery.transition.js"></script> -->
+	<script type="text/javascript" src="selectron.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("body").selectron();
+			$("select[name=otherSelect]").selectron(/*{ "preShow": function () { console.log("hello preshow"); } }*/);
+		});
+	</script>
+	<script type="text/javascript" src="demo.js"></script>
+</head>
+<body>
+	<div class="readme">
+		<h1>
+			Selectron: Lightweight <code>select</code> Replacement</h1>
+
+		<h2><a href="#demo">Try it!</a></h2>
+		<ul>
+			<li><a href="#features">Features</a></li>
+			<li><a href="#simpleUsage">Simple Usage</a></li>
+			<li><a href="#advancedUsage">Advanced Usage</a>
+				<ul>
+					<li><a href="#selectOptions"><code>select</code> Options</a></li>
+					<li><a href="#optionOptions"><code>option</code> Options</a></li>
+				</ul>
+			</li>
+			<li><a href="#behaviorAndStyling">Behavior and Styling</a>
+				<ul>
+					<li><a href="#optionListBehavior">Option List Behavior</a></li>
+					<li><a href="#styleOnlyHtmlElements">Style-only HTML Elements</a></li>
+					<li><a href="#interactivityStyleAndStates">Interactivity Style and States</a>
+						<ul>
+							<li><a href="#interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>select</code> States</a></li>
+							<li><a href="#interactivityStyleListVisibilityStates">Interactivity Style: List Visibility States</a></li>
+						</ul>
+					</li>
+					<li><a href="#animationCallbacksAndListStateActionOrder">Animation Callbacks and List State Action Order</a></li>
+				</ul>
+			</li>
+			<li><a href="#demo">Demo</a></li>
+		</ul>
+		<h2 id="features">
+			Features</h2>
+		<dl>
+			<dt>Only Two Requirements</dt>
+			<dd>
+				<ol>
+					<li>jQuery 1.7 or above</li>
+					<li>"name" attribute on each <code>select</code> element</li>
+				</ol>
+			</dd>
+			<dt>Progressive Enhancement</dt>
+			<dd>
+				Relies on standard <code>select</code> control</dd>
+			<dd>
+				No custom HTML required</dd>
+			<dd>
+				All keyboard functionality replicated or automatically carried over</dd>
+			<dt>Customizable</dt>
+			<dd>
+				Generates robust, flexible HTML</dd>
+			<dd>
+				Call on either <code>select</code> elements directly, or a container element</dd>
+			<dd>
+				Specify options in multiple ways
+				<ul>
+					<li>Per jQuery collection via Javascript</li>
+					<li>Per <code>select</code> via HTML5 data-* attribute</li>
+				</ul>
+			</dd>
+			<dt>Fancy Options</dt>
+				<dd>Create custom, full HTML <code>option</code> labels using an html5 data-* attribute</dd>
+			<dt>Lightweight</dt>
+			<dd>
+				Packs down to less than 5KB</dd>
+			<dd>
+				Doesn't (currently) handle:
+				<ul>
+					<li>OptGroups</li>
+					<li>Multi-Select</li>
+					<li>Advanced Page/Mouse Scrolling Options</li>
+				</ul>
+			</dd>
+		</dl>
+		<h2 id="simpleUsage">
+			Simple Usage</h2>
+		<p>
+			At its most basic, Selectron can be activated in three easy steps:</p>
+		<ol>
+			<li>Include selectron.css after your main styles (or copy/paste)</li>
+			<li>Include selectron.js (or the minified version) anywhere after jQuery</li>
+			<li>On DOM ready, call:
+				<br />
+				<code>$("select").selectron();</code> or
+				<br />
+				<code>$("body").selectron();</code></li>
+		</ol>
+		<h2 id="advancedUsage">
+			Advanced Usage</h2>
+		<h3 id="selectOptions">
+			<code>select</code> Options</h3>
+		<p>
+			Currently all options except one, <code>delegate</code>, are related to animation. Selectron uses 
+			the <a href="http://api.jquery.com/animate/#animate-properties-options">second
+			variation on the jQuery API page</a>.</p>
+			<p>Here is the default options object for each Selectron:</p>
+		<code>{
+    "delegate": "body",
+    "showAnimation" : {
+        "height" : "show"
+    },
+    "hideAnimation" : {
+        "height" : "hide"
+    },
+    "showDuration": 300,
+    "showEasing" : "swing",
+    "showCallback" : function () {  },
+    "hideDuration" : 300,
+    "hideEasing" : "swing",
+    "hideCallback" : function () {  }
+}</code>
+		<dl>
+			<dt><code>delegate</code></dt>
+			<dd>
+				Selectron uses delegation for event capturing. <code>delegate</code> specifies a
+				container in which to track the relevant events. This allows for an additional way
+				to target <code>select</code>s.</dd>
+			<dd>
+				Additionally, <a href="http://api.jquery.com/on/#event-performance">the smaller the
+					area being watched for events, the faster the plugin performs</a></dd>
+
+			<dt><code>showAnimation</code> and <code>hideAnimation</code></dt>
+			<dd>
+				These objects are passed directly to the <code>$.animate()</code> function as the first parameter.</dd>
+
+			<dt><code>showDuration</code> and <code>hideDuration</code></dt>
+			<dd>
+				Duration of each respective animation. Builds into the options object of <code>$.animate()</code>
+			</dd>
+
+			<dt><code>showEasing</code> and <code>hideEasing</code></dt>
+			<dd>
+				Named easing function. Inherently supports any easing plugin for options beyond "linear" and "swing". 
+				Builds into the options object of <code>$.animate()</code>
+			</dd>
+
+			<dt><code>showCallback</code> and <code>hideCallback</code></dt>
+			<dd>
+				Runs after the respective animation. Accepts <code>this</code> object to manipulate the list 
+				(or climb up the <code>$.parents()</code> tree to its parent Selectron). Appended to the 
+				<code>complete</code> property of the options object of <code>$.animate()</code>
+			</dd>
+
+			<dt><i>Unsupported Animation Options</i></dt>
+			<dd>
+				The <code>specialEasing</code> and <code>step</code> animation options are not currently
+				supported
+			</dd>
+		</dl>
+
+		<h3 id="optionOptions">
+			<code>option</code> Options</h3>
+			
+		<p>Each <code>option</code> in a <code>select</code> can be given a different label via the custom <code>data-label</code> attribute.
+			This supports full html with no restrictions, so images and anything else can be used.</p>
+		<p>For example: <code>&lt;option value="03" data-label="&lt;img src='jolly-roger.gif' /&gt; Pirates!"&gt;Pirates!&lt;/option&gt;</code></p>
+	
+		<h2 id="behaviorAndStyling">Behavior and Styling</h2>
+
+		<h3 id="optionListBehavior">Option List Behavior</h3>
+		
+		<p>Selectron Option Lists are designed to emulate the native <code>select</code> behavior as closely as possible</p>
+
+		<p>All Selectron event handlers are namespaced with ".selectron", e.g. "<code>click.selectron</code>".</p>
+		
+		<dl>
+			<dt>Expand List</dt>
+			<dd>Mouse: <code>mousedown</code> event, <code>div.selectronSelected</code> element</dd>
+			<dd>Keyboard: There is no way to expand an options list via keyboard</dd>
+
+			<dt>Change Option</dt>
+			<dd>Mouse: <code>click</code> event, <code>li.selectronLi</code> element</dd>
+			<dd>Keyboard: Native (up/down and Page Up/Page Down)
+			</dd>
+
+			<dt>Collapse List</dt>
+			<dd>Mouse: Clicking on an option. It collapses on the "<code>click</code>" event.</dd>
+			<dd>Keyboard: The three methods of closing a standard <code>select</code> control still apply. Mimicking the default
+				behavior, the last <code>option</code> selected, whether changed via keyboard or unchanged, remains selected.
+				<ul>
+					<li><code>Enter</code> - <code>keydown</code> event</li>
+					<li><code>Esc</code> - <code>keydown</code> event</li>
+					<li><code>Tab</code> - <code>keydown</code> event</li>
+				</ul>
+			</dd>
+		</dl>
+
+		<h3 id="styleOnlyHtmlElements">Style-only HTML Elements</h3>
+		<p>In addition to the required markup, the generated HTML contains many style-only elements and would be considered bloated in 
+			other situations. Selectron, however, requires as much flexibility from its non-indexed HTML as is reasonable.</p>
+		
+		<ul>
+			<li><code>span</code> tags wrap every bit of text.</li>
+			<li>An empty <code>div</code> above the options list that can be used 
+			as a "bridge" between the selected option and the list itself. It's included primarily for IE7 compatibility (due to its lack of 
+			::before and ::after pseudo-elements support.</li>
+		</ul>
+
+		<h3 id="interactivityStyleAndStates">Interactivity Style and States</h3>
+
+		<p>By default, the primary Selectron <code>span</code> element only has the one class: <code>selectron</code>. To track various 
+			states of the select/selectron, additional classes are applied to <code>span.selectron</code> to reflect the various states 
+			of both the Selectron options list and the original <code>select</code> control itself.</p>
+
+		<h4 id="interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>select</code> States</h4>
+		
+		<p>When a Selectron replaces a <code>select</code> control, it's not really a replacement: it's just a new front-end. 
+			The Selectron's job is purely to look pretty and communicate between the user and the original <code>select</code> element.</p>
+
+		<p>To this end, a Selectron appears active when its underlying <code>select</code> is active, and back to inactive 
+			when the user focuses away.</p>
+		
+		<dl>
+			<dt>Original <code>select</code> State: Active</dt>
+			<dd>When a <code>select</code> is made active, either by tabbing to it or clicking on its Selectron, 
+				the class "<code>selectronFocused</code>" is applied to its <code>span.selectron</code>.</dd>
+			
+			<dt>Original <code>select</code> State: Inactive</dt>
+			<dd>No special classes are applied to a <code>span.selectron</code> when its <code>select</code> is inactive</dd>
+		</dl>
+
+		<h4 id="interactivityStyleListVisibilityStates">Interactivity Style: List Visibility States</h4>
+		<dl>
+			<dt>Selectron List State: Hidden (Default)</dt>
+			<dd>No extra classes are applied, as the Selectron starts off with the list hidden.</dd>
+
+			<dt>Selectron List State: Showing</dt>
+			<dd>During the "show" animation, the class "<code>showing</code>" is applied.</dd>
+
+			<dt>Selectron List State: Shown</dt>
+			<dd>When the "show" animation is complete, the "<code>showing</code>" class is removed 
+				and the "<code>shown</code>" class is applied.</dd>
+
+			<dt>Selectron List State: Hiding</dt>
+			<dd>During the hiding animation, the "<code>shown</code>" class is removed, and the class "<code>hiding</code>" is applied.</dd>
+
+			<dd>When the hiding animtion is complete, the "<code>hiding</code>" class is removed, leaving <code>span.selectron</code>
+				with no list state classes applied.</dd>
+		</dl>
+
+		<h3 id="animationCallbacksAndListStateActionOrder">Animation Callbacks and List State Action Order</h3>
+
+		<p>Hiding or showing a list fires a series of actions, some before and some after the animation.</p>
+
+		<dl>
+			<dt>Showing &mdash; Before Animation</dt>
+			<dd>
+				<ol>
+					<li>Remove any "<code>shown</code>" or "<code>hiding</code>" class</li>
+					<li>Add "<code>showing</code>" class</li>
+					<li>Immediately show the style-only "<code>div.selectronListWrapper > div</code>" bridge element</li>
+				</ol>
+			</dd>
+
+			<dt>Showing &mdash; Callback</dt>
+			<dd>
+				<ol>
+					<li>Fix IE7 clearfix bug by removing "filter" css property</li>
+					<li>Remove "<code>showing</code>" class, Add "<code>shown</code>" class</li>
+					<li>Callback function from the Selectron options object</li>
+				</ol>
+			</dd>
+
+			<dt>Hiding &mdash; Before Animation</dt>
+			<dd>
+				<ol>
+					<li>Remove any "<code>shown</code>" or "<code>showing</code>" class</li>
+					<li>Add "<code>hiding</code>" class</li>
+				</ol>
+			</dd>
+
+			<dt>Hiding &mdash; Animation Callback</dt>
+			<dd>
+				<ol>
+					<li>Remove "<code>shown</code>" or "<code>hiding</code>" class<br />
+						(<code>shown</code> class removal was a brute force bug fix. May revisit.)</li>
+					<li>Hide the style-only "<code>div.selectronListWrapper > div</code>" bridge element</li>
+					<li>Callback function from the Selectron options object</li>
+				</ol>
+			</dd>
+		</dl>
+
+	</div>
+
+	<form action="#">
+		<h2 id="demo">
+			Demo
+		</h2>
+		<p>
+			The fancy select replacement emulates the original select's display and position
+			properties.</p>
+		<p>
+			By default, those are display:inline-block and position:static.
+			<select name="account">
+				<option value="1">Select Account</option>
+				<option value="2" data-label="<img width='40' height='32' src='http://www.iconbazaar.com/flags/animated/miscellaneous/jolly_roger_a3a.gif' /> Anuity">Anuity</option>
+				<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+				<option value="4">Insurance</option>
+				<option value="5">Life Insurance</option>
+				<option>Mortgage</option>
+				<option>Mutual Funds</option>
+				<option>Retirement Plans</option>
+			</select>
+			<!--
+			* For durations, be sure not to use quotes unless you're also adding a unit of measurement
+			-->
+			<select name="otherSelect" data-sel-options='{ "showAnimation" : {"opacity" : "show" }, "hideAnimation" : {"opacity" : "hide" }, "hideDuration" : 600, "showDuration" : 200 }'>
+				<option value="1">Select Account</option>
+				<option value="2">Anuity</option>
+				<option value="3">Banking</option>
+				<option value="4">Insurance</option>
+				<option value="5">Life Insurance</option>
+				<option selected="selected">Mortgage</option>
+				<option>Mutual Funds</option>
+				<option>Retirement Plans</option>
+			</select>
+		</p>
+
+		<h2>
+			Original <code>select</code> controls, here for kicks!</h2>
+		<div id="holder">
+		</div>
+	</form>
+
+	<div id="debug">
+	</div>
+
+	<div id="debug2">
+	</div>
+</body>
+</html>
