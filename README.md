@@ -1,14 +1,14 @@
 selectron
 =========
-###Accessible, configurable, (somewhat) lightweight <select> replacement
+###Accessible, configurable, (somewhat) lightweight &lt;select&gt; replacement
 
 Uses the select element as the "model", passing along events to mimic native behavior *nearly* perfectly - opted against "close on scroll" because styled items tend to be larger than native ones.
 
-One of the requirements for the select replacement was to keep accessibility as good as native. To that end, Selectron doesn't actually replace the <select>s, just hides them. This way we keep keyboard shortcuts & change events largely native rather than reinventing all the event/interaction wheels.
+One of the requirements for the select replacement was to keep accessibility as good as native. To that end, Selectron doesn't actually replace the &lt;select&gt;s, just hides them. This way we keep keyboard shortcuts & change events largely native rather than reinventing all the event/interaction wheels.
 
 ###Requires
 * jQuery v1.8 or above
-* "name" attribute on each <select> to replace
+* "name" attribute on each &lt;select&gt; to replace
 
 ###Usage
 
