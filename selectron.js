@@ -1,10 +1,10 @@
 /*!
-* Selectron: Another Select Dropdown. Accessible, lightweight <select> replacement
+* Selectron: Accessible, lightweight <select> replacement
 * @requires jQuery v1.8 or above
 *
-* This is where a project URL would go
+* https://github.com/illfittingshoes/selectron
 *
-* Copyright (c) 2012 Joey Shirley
+* Copyright (c) 2012-2013 Joey Shirley
 * Dual licensed under the MIT and GPL licenses:
 * http://www.opensource.org/licenses/mit-license.php
 * http://www.gnu.org/licenses/gpl.html
@@ -172,7 +172,7 @@
 - more examples, as the page goes along, illustrating various options and their implementations
 - define what options can be set in HTML data-sel-options attribute, and what must be JS
 - create css-only option (possibly default)?
-- Solidify current branch for Old IE, then drop IE7 & IE8 support in
+- Solidify current branch for Old IE, then drop IE7 support in
 -   next version (with removal of IE7 bridge element)
 
 */
@@ -549,16 +549,18 @@
 
                     // Natural event - Focus In
                     if (e.type === "focusin") {
-                            //console.log("focus in!");
+                        //console.log("focus in!");
                         $curSelectron.addClass("selectronFocused");
 
                     // Natural event - Focus Out
                     } else if (e.type === "focusout") {
-                            //console.log("focus out!");
+                        //console.log("focus out!");
                         $curSelectron.removeClass("selectronFocused");
-                        if (!($.browser.msie && parseInt($.browser.version, 10) < 10)) {
-                            self.hideLists($curSelectron[0]);
-                        }
+
+                        // old IE has problems sometimes. jQuery no longer has $.browser. so...
+                        // if (!($.browser.msie && parseInt($.browser.version, 10) < 10)) {
+                        //     self.hideLists($curSelectron[0]);
+                        // }
 
                     // Natural Event (Change) - use keyboard for list nav
                     } else if (e.type === "change") {
