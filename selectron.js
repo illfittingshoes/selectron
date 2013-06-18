@@ -1,6 +1,6 @@
 /*!
 * Selectron: Another Select Dropdown. Accessible, lightweight <select> replacement
-* @requires jQuery v1.7 or above
+* @requires jQuery v1.8 or above
 *
 * This is where a project URL would go
 *
@@ -318,7 +318,7 @@
             */
 
             // put Selectron onto page
-            $select.after(selectronHtml);
+            $select.after($newSelectron);
 
             // create clone of new Selectron
             $newSelectron = $("span.selectron[data-select=" + selectName + "]");
