@@ -1,0 +1,120 @@
+/*! Selectron example HTML: 
+
+	<span class="selectron" data-select="account" style="width: 151px; display: inline-block; position: static;">
+		<div class="selectron__selected"><span class="selectron__selected__inner">Mutual Funds</span><span class="selectron__selected__indicator"></span></div>
+		<div class="selectron__listWrapper">
+			<ul class="selectron__list" style="display: none;">
+				<li class="selectron__li" data-index="0"><span class="selectron__li__inner">Select Account</span></li>
+				<li class="selectron__li" data-index="1"><span class="selectron__li__inner">Anuity</span></li>
+				<li class="selectron__li" data-index="2"><span class="selectron__li__inner">Banking</span></li>
+				<li class="selectron__li" data-index="3"><span class="selectron__li__inner">Insurance</span></li>
+				<li class="selectron__li" data-index="4"><span class="selectron__li__inner">Life Insurance</span></li>
+				<li class="selectron__li" data-index="5"><span class="selectron__li__inner">Mortgage</span></li>
+				<li class="selectron__li selectron__li--selected" data-index="6"><span class="selectron__li__inner">Mutual Funds</span></li>
+				<li class="selectron__li" data-index="7"><span class="selectron__li__inner">Retirement Plans</span></li>
+			</ul>
+		</div>
+	</span>
+
+/*!****************************/
+/*! Selectron Functional Styles - modify at your own risk */
+/*!****************************/
+
+.selectron
+	vertical-align:middle;
+	margin:-2px 0 2px;
+	&__selected
+		display: block;
+		position: relative;
+		white-space:nowrap;
+		overflow:hidden;
+		&__inner
+			display:block;
+			overflow:hidden;
+	&__listWrapper
+		position: relative;
+		z-index: 1000;
+		&::before
+			position:absolute;
+			display:none;
+	&__list
+		position: absolute;
+		margin:0!important;
+		padding:0!important;
+	&__li
+		display: block;
+		list-style:none;
+		&__inner
+			display: block;
+			white-space:nowrap;
+			overflow:hidden;
+
+/*!**********************************/
+/*! End Selectron Functional Styles */
+/*!**********************************/
+
+/*!************************************/
+/*! Selectron Theme Styles - go nuts! */
+/*!************************************/
+
+.selectron
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	user-select: none;
+	&__selected
+		border-radius: 5px;
+		padding-left: 10px;
+		height: 40px;
+		line-height: 40px;
+		color: #333;
+		width: 188px;
+		background: #fff;
+		text-decoration: none;
+		border:1px solid #e7e7e7;
+	&--focused .selectron__selected
+		background:#f9f9f9;
+	&__selected
+		&:hover
+		&:active
+			/*! some styles */
+		&__inner
+			/*! some styles */
+	&--shown .selectron__selected__inner
+		/*! some styles */
+	&--hiding .selectron__selected__inner
+		/*! some styles */
+	&--showing .selectron__selected__inner
+		/*! some styles */
+	&__listWrapper:before
+		background:#fff;
+		border-left:1px solid #e7e7e7;
+		border-right:1px solid #e7e7e7;
+		height:5px;
+		top:-5px;
+		width:100%;
+	&--focused .selectron__listWrapper::before
+		background:#f9f9f9;
+	&__list
+		width:198px;
+		background: #fff;
+		border-left:1px solid #e7e7e7;
+		border-right:1px solid #e7e7e7;
+		border-bottom:1px solid #e7e7e7;
+		border-bottom-right-radius: 5px;
+		border-bottom-left-radius: 5px;
+	&__li
+		color: #000;
+		border-top: 1px dotted #e7e7e7;
+		padding: 0;
+		&:first-child
+			border-top: 1px solid #e7e7e7;
+		&__inner
+			padding: 10px 10px;
+		&:hover .selectron__li__inner
+			background: #F9F9F9;
+		&--selected .selectron__li__inner
+			background: #EEE;
+
+/*!****************************/
+/*! End Selectron Theme Styles */
+/*!****************************/

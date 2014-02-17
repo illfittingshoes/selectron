@@ -25,8 +25,8 @@
 *
 * Version: 0.1.1
 * 2012/02/20
-* - Changed div class "selectronInner" to "selectronListWrapper"
-* - Added empty div before selectronList
+* - Changed div class "selectronInner" to "selectron__listWrapper"
+* - Added empty div before selectron__list
 *   - empty div allows for absolutely positioned "bridge" element between
 *     placeholder and list (useful for placeholders with rounded corners)
 * - Added span wrapper inside each list item for additional style options
@@ -34,11 +34,11 @@
 * TODONE: Clean up (dear god...), restructure to jQuery standards
 *
 * Version: 0.2.0
-* - Changed .selectronSelected from <a> to <div>
-* - Removed .hidden class and added .shown class in order to prevent conflicts
+* - Changed .selectron__selected from <a> to <div>
+* - Removed .hidden class and added .selectron--shown class in order to prevent conflicts
 *   from boilerplate "hidden" behavior (specifically html5boilerplate.com). It
 *   also makes sense because it's hidden by default
-* - Moved .shown/.showing/.hiding from .selectronSelected
+* - Moved .selectron--shown/.selectron--showing/.hiding from .selectron__selected
 *       to .selectron container
 * - Reorganized to "highly configurable mutable plugin" style
 * - Mimic native controls by maxing viewable Selectrons to 1 at a time
@@ -201,7 +201,7 @@
     // the plugin prototype
     Selectron.prototype = {
         defaults: {
-            "delegate": "body",
+            "delegate": "html",
             "autoWidth": false,
             "inheritWidth": false,
             // Animation
@@ -254,27 +254,25 @@
                     };
                 }),
 
-                selectedIndex = $select[0].selectedIndex,
                 selectName = $select.attr("name"),
+                selectedIndex = $select[0].selectedIndex,
+                selectedOption = (selectedIndex ? optionsMap[selectedIndex].label : ("<span class=\"selectron__selected__inner\">" + optionsMap[selectedIndex].label + "</span>")),
 
                 // Opening HTML
-                selectronHtml = "<span class=\"selectron\" data-select=\"" +
-                    selectName + "\">" +
-                    "<div class=\"selectronSelected\">" +
-                    (selectedIndex ? optionsMap[selectedIndex].label : ("<span>" + optionsMap[selectedIndex].label + "</span>")) +
-                    "<span class=\"selIndicator\"></span></div>" +
-                    "<div class=\"selectronListWrapper\"><div></div>" +
-                    "<ul class=\"selectronList\">";
-
+                selectronHtml = "<div class=\"selectron\" data-select=\"" + selectName + "\">" +
+                    "<div class=\"selectron__selected\">" + selectedOption +
+                        "<span class=\"selectron__selected__indicator\"></span></div>" +
+                    "<div class=\"selectron__listWrapper\">" +
+                    "<ul class=\"selectron__list\">";
 
             $select.data("optionLabels", []);
 
             // populate list
             $.each(optionsMap, function () {
-                var selected = (this.selected ? " selected" : "");
+                var selected = (this.selected ? " selectron__li--selected" : "");
                 // Option List Item HTML
-                selectronHtml += "<li class=\"selectronLi" + selected + "\" data-index=\"" +
-                    this.optIndex + "\"><span>" + this.label +
+                selectronHtml += "<li class=\"selectron__li" + selected + "\" data-index=\"" +
+                    this.optIndex + "\"><span class=\"selectron__li__inner\">" + this.label +
                     "</span></li>";
                 $select.data("optionLabels")[this.optIndex] = this.label;
             });
@@ -282,7 +280,7 @@
             // finish Selectron HTML
             selectronHtml += "</ul>" +
                         "</div>" +
-                        "</span>";
+                        "</div>";
 
             return $(selectronHtml);
         },
@@ -321,7 +319,7 @@
             $select.after($newSelectron);
 
             // create clone of new Selectron
-            $newSelectron = $("span.selectron[data-select=" + selectName + "]");
+            $newSelectron = $(".selectron[data-select=" + selectName + "]");
             $newSelectronClone = $newSelectron.clone().css("visibility", "hidden");
             $("body").append($newSelectronClone);
 
@@ -338,7 +336,7 @@
                 listWidth = $newSelectronCloneList.width();
 
                 if(selOpts.autoWidth) {
-                    $ind = $newSelectronClone.find("span.selIndicator");
+                    $ind = $newSelectronClone.find(".selectron__selected__indicator");
                     autoWidth = listWidth + $ind.outerWidth(true) - $ind.css("marginRight").replace("px","")*1;
                     $newSelectron.css({ "width": autoWidth + "px" });
                     $newSelectronClone.css({ "width": autoWidth + "px" });
@@ -346,17 +344,17 @@
 
                 // a thousand cursus upon your head, old ie
                 // i.e. "elaborate hacks to set correct width of bridge div"
-                selBorderWidth = $newSelectronClone.find("div.selectronSelected").outerWidth() - $newSelectronClone.find("div.selectronSelected").innerWidth();
-                selInnerWidth = $newSelectronClone.width() - selBorderWidth;
-                $newSelectron.find("div.selectronListWrapper > div").css("width", ( $newSelectronClone.find("div.selectron").innerWidth() - selBorderWidth ) + "px");
+                //selBorderWidth = $newSelectronClone.find("div.selectron__selected").outerWidth() - $newSelectronClone.find("div.selectron__selected").innerWidth();
+                //selInnerWidth = $newSelectronClone.width() - selBorderWidth;
+                //$newSelectron.find("div.selectron__listWrapper > div").css("width", ( $newSelectronClone.find("div.selectron").innerWidth() - selBorderWidth ) + "px");
                 
                 // ... set new list width ...
-                $newSelectron.find("ul.selectronList").css("width", selInnerWidth + "px");
+                $newSelectron.find(".selectron__list").css("width", selInnerWidth + "px");
             }
 
             // then destroy clone and hide selectron dropdown
             $newSelectronClone.remove();
-            $newSelectron.find(".selectronList").hide();
+            $newSelectron.find(".selectron__list").hide();
 
             // hide original select
             $select.css({ "position": "absolute", "left": "-9999em", "display": (this.isIpad ? "none" : $select.css("display")) });
@@ -370,7 +368,7 @@
 
         /*
         *   show one selectron dropdown list
-        *   @list = span.selectron
+        *   @list = .selectron
         *
         *   the list passed must not be shown or being shown
         */
@@ -387,7 +385,7 @@
                             this.style.removeAttribute('filter');
                         }
 
-                        $list.removeClass("showing").addClass("shown");
+                        $list.removeClass("selectron--showing").addClass("selectron--shown");
                         opts.showCallback.call(list);
                     }
                 };
@@ -396,8 +394,8 @@
                 showOpts.specialEasing = opts.showSpecialEasing;
             }
 
-            $list.stop().removeClass("shown hiding").addClass("showing")
-                .find(".selectronListWrapper > div").show();
+            $list.stop().removeClass("selectron--shown selectron--hiding").addClass("selectron--showing");
+                //.find(".selectron__listWrapper > div").show(); // FU IE7
 
             opts.preShow.call(list);
 
@@ -409,8 +407,8 @@
         *   @list = .selectron (optional)
         */
         hideLists: function (list) {
-            var lists = list || "span.selectron",
-                $lists = $(lists).filter(".shown, .showing");
+            var lists = list || ".selectron",
+                $lists = $(lists).filter(".selectron--shown, .selectron--showing");
             $lists.each(function () {
                 var $this = $(this),
                     opts = $("select[name=" + $this.attr("data-select") + "]").data().selectronConfig,
@@ -418,8 +416,8 @@
                         "duration": opts.hideDuration,
                         "easing": opts.hideEasing,
                         "complete": function () {
-                            $this.removeClass("hiding shown");
-                            $this.find(".selectronListWrapper > div").hide();
+                            $this.removeClass("selectron--hiding selectron--shown");
+                            // $this.find(".selectron__listWrapper > div").hide(); // FU IE7
                             opts.hideCallback.call(this);
                         }
                     };
@@ -428,8 +426,8 @@
                     hideOpts.specialEasing = opts.hideSpecialEasing;
                 }
 
-                $lists.stop().removeClass("shown showing").addClass("hiding");
-                $lists.find(".selectronList").animate(opts.hideAnimation, hideOpts);
+                $lists.stop().removeClass("selectron--shown selectron--showing").addClass("selectron--hiding");
+                $lists.find(".selectron__list").animate(opts.hideAnimation, hideOpts);
             });
         },
 
@@ -484,37 +482,39 @@
         handle: function (e, action, el) {
             var $parentSelectron, $origSelect, $curSelectron, selectedIndex, keyPressed,
                 selectedHtml = "",
-                self = this;
+                self = this,
+                code = e.keyCode || e.which;
 
             if ((e.type === "mousedown" || e.type === "click") && action !== "deselectAll") {
                 self.stopEvent(e);
+            } else {
             }
 
             switch (action) {
 
             // Hide all lists if a user clicks away [TODO: or changes focus]
             case "deselectAll":
-                if (!$(el).is("span.selectron")) {
+                if (!$(el).is(".selectron")) {
                     self.hideLists();
                 }
                 break;
 
-            // Show or hide list when a.selectronSelected is clicked [TODO: or tabbed to]
+            // Show or hide list when a.selectron__selected is clicked [TODO: or tabbed to]
             case "selectedToggleShown":
-                $parentSelectron = $(el).parents("span.selectron");
+                $parentSelectron = $(el).parents(".selectron");
                 self.keepFocus(null, $parentSelectron[0]);
 
                 // hide all other selectrons
-                $("span.selectron").each(function () {
+                $(".selectron").each(function () {
                     var $this = $(this);
 
-                    if (!$this.is($parentSelectron[0]) && $this.is(".shown, .showing")) {
+                    if (!$this.is($parentSelectron[0]) && $this.is(".selectron--shown, .selectron--showing")) {
                         self.hideLists($this[0]);
                     }
                 });
 
                 // toggle targeted list
-                if ($parentSelectron.is(".showing, .shown")) {
+                if ($parentSelectron.is(".selectron--showing, .selectron--shown")) {
                     self.hideLists($parentSelectron[0]);
                 } else {
                     self.showList($parentSelectron[0]);
@@ -524,7 +524,7 @@
 
             // Change Selected Option
             case "clickChange":
-                $parentSelectron = $(el).parents("span.selectron");
+                $parentSelectron = $(el).parents(".selectron");
                 $origSelect = $("select[name=" + $parentSelectron.attr("data-select") + "]");
 
                 // change actual selected option
@@ -537,49 +537,41 @@
                 break;
 
             case "tabDeselect":
-                $curSelectron = $("span.selectron[data-select=" + $(el).attr("name") + "]");
+                $curSelectron = $(".selectron[data-select=" + $(el).attr("name") + "]");
                 self.hideLists($curSelectron[0]);
 
                 break;
 
             // Update the Selectron display if the changed <select> has an associated Selectron
             case "reflectStatus":
-                $curSelectron = $("span.selectron[data-select=" + $(el).attr("name") + "]");
+                console.log("reflecting status (type '" + e.type + "') at: " + Date.now());
+                $curSelectron = $(".selectron[data-select=" + $(el).attr("name") + "]");
                 if ($curSelectron.length > 0) {
-
                     // Natural event - Focus In
                     if (e.type === "focusin") {
-                        //console.log("focus in!");
-                        $curSelectron.addClass("selectronFocused");
+                        $curSelectron.addClass("selectron--focused");
 
                     // Natural event - Focus Out
                     } else if (e.type === "focusout") {
-                        //console.log("focus out!");
-                        $curSelectron.removeClass("selectronFocused");
-
-                        // old IE has problems sometimes. jQuery no longer has $.browser. so...
-                        // if (!($.browser.msie && parseInt($.browser.version, 10) < 10)) {
-                        //     self.hideLists($curSelectron[0]);
-                        // }
+                        $curSelectron.removeClass("selectron--focused");
 
                     // Natural Event (Change) - use keyboard for list nav
-                    } else if (e.type === "change") {
+                    } else if (e.type === "change" || e.type === "keydown") {
                         selectedIndex = $(el).prop("selectedIndex");
 
+                        // use setTimeout to wait till end of current browser loop queue - firefox again
                         setTimeout(function () {
                             var $el = $(el);
 
-                            if ((e.type === "change" || e.type === "keyup") || selectedIndex !== $el.prop("selectedIndex")) {
-                                selectedIndex = $el.prop("selectedIndex");
-                                selectedHtml = $el.data("optionLabels")[selectedIndex];
-                                $curSelectron.find(".selectronSelected").html(selectedHtml + "<span class=\"selIndicator\"></span>");
-                                $curSelectron.find("li").removeClass("selected").parent()
-                                    .find("[data-index=" + selectedIndex + "]")
-                                    .addClass("selected");
-                            }
+                            selectedIndex = $el.prop("selectedIndex");
+                            selectedHtml = $el.data("optionLabels")[selectedIndex];
+                            $curSelectron.find(".selectron__selected").html(selectedHtml + "<span class=\"selectron__selected__indicator\"></span>");
+                            $curSelectron.find("li").removeClass("selectron__li--selected").parent()
+                                .find("[data-index=" + selectedIndex + "]")
+                                .addClass("selectron__li--selected");
 
-                            keyPressed = e.keyCode || e.which;
-                            if (e.type === "keyup" && keyPressed === 13) {
+                            // Enter key
+                            if (e.type === "keydown" && code === 13) {
                                 self.hideLists($curSelectron[0]);
                             }
                         }, 1);
@@ -597,7 +589,6 @@
             if (!$.selectron) {
                 $.selectron = {};
 
-                /* The following whole document handlers exist solely for Old IE */
                 // Whole Document - Escape & Tab Keys
                 $("html").on("keydown.selectron", function (e) {
                     var code = e.keyCode || e.which;
@@ -613,42 +604,42 @@
                 });
 
                 // Whole Document - Click
-                $("html").on("mousedown.selectron", function () {
-                    var $el = $(this);
+                $("html").on("mousedown.selectron", function (e) {
+                    var $el = $(e.target);
 
                     // If no selectron was clicked
                     if(!$el.is(".selectron") && $el.parents(".selectron").length < 1) {
-                        
+                        console.log("NONSELECTRON clicked. ", e);
                         // Close all selectrons
                         self.hideLists();
+                    } else {
+                        self.stopEvent(e);
                     }
                 });
 
-
-                $(opts.delegate).on("mousedown.selectron mouseup.selectron click.selectron", ".selectron", function (e) {
+                // show/hide selectron list or change selected option
+                $(opts.delegate).on("mousedown.selectron mouseup.selectron", ".selectron", function (e) {
                     var $target = $(e.target),
                         $this = $(this),
                         el = {};
-                    //console.log("target: ", $target[0], "this: ", $this[0]);
 
-                    // Show or hide list when a.selectronSelected is clicked
-                    if($target.is(".selectronSelected") || $target.parents(".selectronSelected").length > 0) {
-
-                        if(e.type === "mousedown") {
-                            el = $(this).find(".selectronSelected")[0];
-                            self.handle(e, "selectedToggleShown", el);
-                        } else {
-                            self.stopEvent(e);
+                    // Show or hide list when a .selectron__selected is clicked
+                    if(e.type === "mousedown") {
+                        if($target.is(".selectron__selected") || $target.parents(".selectron__selected").length > 0) {
+                            console.log("selected option clicked!");
+                            if(e.type === "mousedown") {
+                                el = $(this).find(".selectron__selected")[0];
+                                self.handle(e, "selectedToggleShown", el);
+                            } else {
+                                self.stopEvent(e);
+                            }
                         }
+                    } else if (e.type === "mouseup") {
+                        if($target.is(".selectron__li") || $target.parents(".selectron__li").length > 0) {
 
-                    } else if ($target.is(".selectronLi") || $target.parents(".selectronLi").length > 0) {
-
-                    // Change Selected Option
-                        if (e.type === "click") {
-                            el = ($target.is(".selectronLi")) ? $target[0] : $target.parents(".selectronLi")[0];
+                            // Change Selected Option
+                            el = ($target.is(".selectron__li")) ? $target[0] : $target.parents(".selectron__li")[0];
                             self.handle(e, "clickChange", el);
-                        } else {
-                            self.stopEvent(e);
                         }
                     }
 
@@ -660,13 +651,15 @@
                 });
 
                 // Reflect Selected Option Change
-                $("body").on("focusout.selectron focusin.selectron change.selectron", "select", function (e) {
-                    
-                    // was formerly also watching keydown in case change event fired,
-                    // but this was unnecessary because the original select is never expanded
-                    // and thus an up/down/pageup/pagedown will always fire the change event
+                $("body").on("focusout.selectron focusin.selectron change.selectron keydown.selectron", "select", function (e) {
+                    // keyup/keydown is only necessary in firefox, which
+                    // doesn't fire change event till focus is lost (technically to spec)
+                    // perhaps write a test to check on selectron init
+
                     self.handle(e, "reflectStatus", this);
                 });
+
+
             }
         }
     };
@@ -679,14 +672,14 @@
             var $this = $(this);
 
             if ($this.is("select")) {
-                if ($("span.selectron[data-select=" + $this.attr("name") + "]").length < 1) {
+                if ($(".selectron[data-select=" + $this.attr("name") + "]").length < 1) {
                     return new Selectron(this, options).init();
                 } else {
                     $.extend($(this).data("selectronConfig"), options);
                 }
             } else if ($this.find("select").length > 0) {
                 $this.find("select").each(function () {
-                    if ($("span.selectron[data-select=" + $(this).attr("name") + "]").length < 1) {
+                    if ($(".selectron[data-select=" + $(this).attr("name") + "]").length < 1) {
                         return new Selectron(this, options).init();
                     } else {
                         $.extend($(this).data("selectronConfig"), options);

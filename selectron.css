@@ -1,191 +1,121 @@
-﻿/* Selectron example HTML: 
+/* Selectron example HTML: 
 
-<span class="selectron" data-select="account" style="width: 151px; display: inline-block; position: static;">
-	<div class="selectronSelected"><span>Mutual Funds</span></div>
-	<div class="selectronListWrapper">
-		<div></div>
-		<ul class="selectronList" style="display: none;">
-			<li class="selectronLi" data-index="0"><span>Select Account</span></li>
-			<li class="selectronLi" data-index="1"><span>Anuity</span></li>
-			<li class="selectronLi" data-index="2"><span>Banking</span></li>
-			<li class="selectronLi" data-index="3"><span>Insurance</span></li>
-			<li class="selectronLi" data-index="4"><span>Life Insurance</span></li>
-			<li class="selectronLi" data-index="5"><span>Mortgage</span></li>
-			<li class="selectronLi selected" data-index="6"><span>Mutual Funds</span></li>
-			<li class="selectronLi" data-index="7"><span>Retirement Plans</span></li>
-		</ul>
-	</div>
-</span>
+	<span class="selectron" data-select="account" style="width: 151px; display: inline-block; position: static;">
+		<div class="selectron__selected"><span class="selectron__selected__inner">Mutual Funds</span><span class="selectron__selected__indicator"></span></div>
+		<div class="selectron__listWrapper">
+			<ul class="selectron__list" style="display: none;">
+				<li class="selectron__li" data-index="0"><span class="selectron__li__inner">Select Account</span></li>
+				<li class="selectron__li" data-index="1"><span class="selectron__li__inner">Anuity</span></li>
+				<li class="selectron__li" data-index="2"><span class="selectron__li__inner">Banking</span></li>
+				<li class="selectron__li" data-index="3"><span class="selectron__li__inner">Insurance</span></li>
+				<li class="selectron__li" data-index="4"><span class="selectron__li__inner">Life Insurance</span></li>
+				<li class="selectron__li" data-index="5"><span class="selectron__li__inner">Mortgage</span></li>
+				<li class="selectron__li selectron__li--selected" data-index="6"><span class="selectron__li__inner">Mutual Funds</span></li>
+				<li class="selectron__li" data-index="7"><span class="selectron__li__inner">Retirement Plans</span></li>
+			</ul>
+		</div>
+	</span>
 
-/*****************************/
+/*!****************************/
 /* Selectron Functional Styles - modify at your own risk */
 /*****************************/
-
-.selectron 
-{
-	vertical-align:middle;
-	margin:-2px 0 2px;
+.selectron {
+  vertical-align: middle;
+  margin: -2px 0 2px;
 }
-
-.selectronSelected
-{
-	display: block;
-	position: relative;
-	white-space:nowrap;
-	overflow:hidden;
+.selectron__selected {
+  display: block;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
 }
-.selectronSelected > span
-{
-	display:block;
-	overflow:hidden;
+.selectron__selected__inner {
+  display: block;
+  overflow: hidden;
 }
-
-.selectronListWrapper
-{
-	position: relative;
-	z-index: 1000;
+.selectron__listWrapper {
+  position: relative;
+  z-index: 1000;
 }
-
-.selectronListWrapper > div
-{
-	position:absolute;
-	display:none;
+.selectron__listWrapper::before {
+  position: absolute;
+  display: none;
 }
-
-.selectronList
-{
-	position: absolute;
-	margin:0!important;
-	padding:0!important;
+.selectron__list {
+  position: absolute;
+  margin: 0 !important;
+  padding: 0 !important;
 }
-
-.selectronLi
-{
-	display: block;
-	list-style:none;
+.selectron__li {
+  display: block;
+  list-style: none;
 }
-
-.selectronLi > span
-{
-	display: block;
-	white-space:nowrap;
-	overflow:hidden;
+.selectron__li__inner {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
 }
 /***********************************/
 /* End Selectron Functional Styles */
 /***********************************/
-
-
 /*************************************/
 /* Selectron Theme Styles - go nuts! */
 /*************************************/
-.selectron
-{
-	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
-	user-select: none;
+.selectron {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
-
-.selectronSelected
-{
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding-left: 10px;
-	height: 40px;
-	line-height: 40px;
-	color: #333;
-	width: 188px;
-	background: #fff;
-	text-decoration: none;
-	border:1px solid #e7e7e7;
+.selectron__selected {
+  border-radius: 5px;
+  padding-left: 10px;
+  height: 40px;
+  line-height: 40px;
+  color: #333;
+  width: 188px;
+  background: #fff;
+  text-decoration: none;
+  border: 1px solid #e7e7e7;
 }
-
-.selectronFocused .selectronSelected
-{
-	background:#f9f9f9;
+.selectron--focused .selectron__selected {
+  background: #f9f9f9;
 }
-
-.selectronSelected:hover, .selectronSelected:active
-{
+.selectron__listWrapper:before {
+  background: #fff;
+  border-left: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
+  height: 5px;
+  top: -5px;
+  width: 100%;
 }
-
-.selectronSelected > span
-{
+.selectron--focused .selectron__listWrapper::before {
+  background: #f9f9f9;
 }
-
-.selectron.hidden .selectronSelected > span
-{
+.selectron__list {
+  width: 198px;
+  background: #fff;
+  border-left: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
-
-.selectron.hiding .selectronSelected > span
-{
+.selectron__li {
+  color: #000;
+  border-top: 1px dotted #e7e7e7;
+  padding: 0;
 }
-
-.selectron.showing .selectronSelected > span
-{
+.selectron__li:first-child {
+  border-top: 1px solid #e7e7e7;
 }
-
-.selectronListWrapper > div
-{
-	background:#fff;
-	border-left:1px solid #e7e7e7;
-	border-right:1px solid #e7e7e7;
-	height:5px;
-	top:-5px;
-	width:100%;
+.selectron__li__inner {
+  padding: 10px 10px;
 }
-
-.selectronFocused .selectronListWrapper > div 
-{
-	background:#f9f9f9;
+.selectron__li:hover .selectron__li__inner {
+  background: #f9f9f9;
 }
-
-.selectronList
-{
-	width:198px;
-	background: #fff;
-	border-left:1px solid #e7e7e7;
-	border-right:1px solid #e7e7e7;
-	border-bottom:1px solid #e7e7e7;
-	-webkit-border-bottom-right-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	-moz-border-radius-bottomright: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	border-bottom-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-}
-
-.selectronLi
-{
-	color: #000;
-	border-top: 1px dotted #e7e7e7;
-	padding: 0;
-}
-
-.selectronLi:first-child
-{
-	border-top: 1px solid #e7e7e7;
-}
-
-.selectronLi > span
-{
-	padding: 10px 10px;
-}
-
-.selectronLi:hover span
-{
-	background: #F9F9F9;
-}
-
-.selectronLi.selected span
-{
-	background: #EEE;
+.selectron__li--selected .selectron__li__inner {
+  background: #eee;
 }
 /*****************************/
 /* End Selectron Theme Styles */
