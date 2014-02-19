@@ -544,7 +544,6 @@
 
             // Update the Selectron display if the changed <select> has an associated Selectron
             case "reflectStatus":
-                console.log("reflecting status (type '" + e.type + "') at: " + Date.now());
                 $curSelectron = $(".selectron[data-select=" + $(el).attr("name") + "]");
                 if ($curSelectron.length > 0) {
                     // Natural event - Focus In
@@ -609,7 +608,6 @@
 
                     // If no selectron was clicked
                     if(!$el.is(".selectron") && $el.parents(".selectron").length < 1) {
-                        console.log("NONSELECTRON clicked. ", e);
                         // Close all selectrons
                         self.hideLists();
                     } else {
@@ -626,7 +624,6 @@
                     // Show or hide list when a .selectron__selected is clicked
                     if(e.type === "mousedown") {
                         if($target.is(".selectron__selected") || $target.parents(".selectron__selected").length > 0) {
-                            console.log("selected option clicked!");
                             if(e.type === "mousedown") {
                                 el = $(this).find(".selectron__selected")[0];
                                 self.handle(e, "selectedToggleShown", el);
@@ -652,14 +649,12 @@
 
                 // Reflect Selected Option Change
                 $("body").on("focusout.selectron focusin.selectron change.selectron keydown.selectron", "select", function (e) {
+                    
                     // keyup/keydown is only necessary in firefox, which
                     // doesn't fire change event till focus is lost (technically to spec)
                     // perhaps write a test to check on selectron init
-
                     self.handle(e, "reflectStatus", this);
                 });
-
-
             }
         }
     };
@@ -667,22 +662,31 @@
     Selectron.defaults = Selectron.prototype.defaults;
 
     $.fn.selectron = function (options) {
-        //return this.each( function () {
+        function newSelectron(el, options) {
+            //console.log("new selectron. selectronConfig: ", $(el).data("selectronConfig"));
+            return new Selectron(el, options).init();
+        }
+
+        function extendSelectron(el, options) {
+            //console.log("extending selectron. selectronConfig: ", $(el).data("selectronConfig"));
+            $.extend($(el).data("selectronConfig"), options);
+        }
+
         return this.each(function () {
             var $this = $(this);
 
             if ($this.is("select")) {
-                if ($(".selectron[data-select=" + $this.attr("name") + "]").length < 1) {
-                    return new Selectron(this, options).init();
+                if (!$this.data("selectronConfig")) {
+                    newSelectron(this, options);
                 } else {
-                    $.extend($(this).data("selectronConfig"), options);
+                    extendSelectron(this, options);
                 }
             } else if ($this.find("select").length > 0) {
                 $this.find("select").each(function () {
-                    if ($(".selectron[data-select=" + $(this).attr("name") + "]").length < 1) {
-                        return new Selectron(this, options).init();
+                    if (!$(this).data("selectronConfig")) {
+                        newSelectron(this, options);
                     } else {
-                        $.extend($(this).data("selectronConfig"), options);
+                        extendSelectron(this, options);
                     }
                 });
             }
