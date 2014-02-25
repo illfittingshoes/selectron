@@ -1,9 +1,9 @@
 /* Selectron example HTML: 
 
-	<span class="selectron" data-select="account" style="width: 151px; display: inline-block; position: static;">
-		<div class="selectron__selected"><span class="selectron__selected__inner">Mutual Funds</span><span class="selectron__selected__indicator"></span></div>
+	<div class="selectron" data-select="account">
+		<div class="selectron__selected"><div class="selectron__selected__inner">Mutual Funds</div><span class="selectron__selected__indicator"></span></div>
 		<div class="selectron__listWrapper">
-			<ul class="selectron__list" style="display: none;">
+			<ul class="selectron__list">
 				<li class="selectron__li" data-index="0"><span class="selectron__li__inner">Select Account</span></li>
 				<li class="selectron__li" data-index="1"><span class="selectron__li__inner">Anuity</span></li>
 				<li class="selectron__li" data-index="2"><span class="selectron__li__inner">Banking</span></li>
@@ -14,27 +14,36 @@
 				<li class="selectron__li" data-index="7"><span class="selectron__li__inner">Retirement Plans</span></li>
 			</ul>
 		</div>
-	</span>
+	</div>
 
 /*!****************************/
 /* Selectron Functional Styles - modify at your own risk */
 /*****************************/
+.selectron,
+.selectron * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 .selectron {
+  display: inline-block;
   vertical-align: middle;
-  margin: -2px 0 2px;
 }
 .selectron__selected {
   display: block;
   position: relative;
   white-space: nowrap;
   overflow: hidden;
+/* offset top and bottom margin by total top & bottom border to fix inline text alignment */
+  margin: -2px 0 2px;
 }
 .selectron__selected__inner {
-  display: block;
   overflow: hidden;
 }
 .selectron__listWrapper {
   position: relative;
+/* offset top by total .selectron__selected top & bottom border to fix inline text alignment */
+  top: -2px;
+  width: 100%;
   z-index: 1000;
 }
 .selectron__listWrapper::before {
@@ -42,6 +51,7 @@
   display: none;
 }
 .selectron__list {
+  width: 100%;
   position: absolute;
   margin: 0 !important;
   padding: 0 !important;
@@ -55,6 +65,10 @@
   white-space: nowrap;
   overflow: hidden;
 }
+/* IE8 Fixes */
+.lt-ie9 .selectron {
+  vertical-align: baseline;
+}
 /***********************************/
 /* End Selectron Functional Styles */
 /***********************************/
@@ -65,20 +79,24 @@
   cursor: pointer;
   -webkit-touch-callout: none;
   user-select: none;
-}
-.selectron__selected {
-  border-radius: 5px;
-  padding-left: 10px;
   height: 40px;
   line-height: 40px;
   color: #333;
-  width: 188px;
-  background: #fff;
   text-decoration: none;
+}
+.selectron__selected {
   border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 10px;
 }
 .selectron--focused .selectron__selected {
   background: #f9f9f9;
+}
+.selectron--shown .selectron__selected,
+.selectron--hiding .selectron__selected {
+  border-radius: 5px 5px 0 0;
+  border-bottom: none;
 }
 .selectron__listWrapper:before {
   background: #fff;
@@ -92,7 +110,7 @@
   background: #f9f9f9;
 }
 .selectron__list {
-  width: 198px;
+  display: none;
   background: #fff;
   border-left: 1px solid #e7e7e7;
   border-right: 1px solid #e7e7e7;
@@ -120,3 +138,8 @@
 /*****************************/
 /* End Selectron Theme Styles */
 /*****************************/
+/* Selectron CSS Transitions Only, 
+ *  using custom "selectransitioner" class */
+.selectransitioner.selectron--shown .selectron__list {
+  display: block;
+}

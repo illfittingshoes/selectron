@@ -1,34 +1,30 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Selectron</title>
 	<meta name="viewport" content="width=device-width" />
 	<link rel="Stylesheet" type="text/css" href="demo.css" />
 	<link rel="Stylesheet" type="text/css" href="selectron.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<!-- <script type="text/javascript" src="jquery.transition.js"></script> -->
-	<script type="text/javascript" src="selectron.js"></script>
-	<script type="text/javascript">
-		$(function () {
-			$("body").selectron();
-			$("select[name=otherSelect]").selectron(/*{ "preShow": function () { console.log("hello preshow"); } }*/);
-		});
-	</script>
-	<script type="text/javascript" src="demo.js"></script>
 </head>
 <body>
 	<div class="readme">
 		<h1>
-			Selectron: Lightweight <code>select</code> Replacement</h1>
+			Selectron: Lightweight <code>&lt;select&gt;</code> Replacement</h1>
 
-		<h2><a href="#demo">Try it!</a></h2>
+		<h2><a href="#demo">Live Examples</a></h2>
 		<ul>
+			<li><a href="#requirements">Requirements</a></li>
 			<li><a href="#features">Features</a></li>
 			<li><a href="#simpleUsage">Simple Usage</a></li>
 			<li><a href="#advancedUsage">Advanced Usage</a>
 				<ul>
-					<li><a href="#selectOptions"><code>select</code> Options</a></li>
-					<li><a href="#optionOptions"><code>option</code> Options</a></li>
+					<li><a href="#selectOptions"><code>&lt;select&gt;</code> Options</a></li>
+					<li><a href="#optionOptions"><code>&lt;option&gt;</code> Options</a></li>
 				</ul>
 			</li>
 			<li><a href="#behaviorAndStyling">Behavior and Styling</a>
@@ -37,7 +33,7 @@
 					<li><a href="#styleOnlyHtmlElements">Style-only HTML Elements</a></li>
 					<li><a href="#interactivityStyleAndStates">Interactivity Style and States</a>
 						<ul>
-							<li><a href="#interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>select</code> States</a></li>
+							<li><a href="#interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>&lt;select&gt;</code> States</a></li>
 							<li><a href="#interactivityStyleListVisibilityStates">Interactivity Style: List Visibility States</a></li>
 						</ul>
 					</li>
@@ -46,46 +42,65 @@
 			</li>
 			<li><a href="#demo">Demo</a></li>
 		</ul>
-		<h2 id="features">
-			Features</h2>
+
+		<h2 id="requirements">Requirements</h2>
+		<ol>
+			<li>jQuery 1.8 or above (1.7 with some tweaks)</li>
+			<li>"name" attribute on each <code>&lt;select&gt;</code> element</li>
+		</ol>
+
+		<h2 id="features">Features</h2>
 		<dl>
-			<dt>Only Two Requirements</dt>
+			<dt>Progressive Enhancement: Leaves original <code>&lt;select&gt;</code> intact</dt>
 			<dd>
-				<ol>
-					<li>jQuery 1.7 or above</li>
-					<li>"name" attribute on each <code>select</code> element</li>
-				</ol>
-			</dd>
-			<dt>Progressive Enhancement</dt>
-			<dd>
-				Relies on standard <code>select</code> control</dd>
-			<dd>
-				No custom HTML required</dd>
-			<dd>
-				All keyboard functionality replicated or automatically carried over</dd>
-			<dt>Customizable</dt>
-			<dd>
-				Generates robust, flexible HTML</dd>
-			<dd>
-				Call on either <code>select</code> elements directly, or a container element</dd>
-			<dd>
-				Specify options in multiple ways
+				Plugin doesn't actually REPLACE the element: original <code>&lt;select&gt;</code> remains the true, active form control
 				<ul>
-					<li>Per jQuery collection via Javascript</li>
-					<li>Per <code>select</code> via HTML5 data-* attribute</li>
+					<li>Doesn't attempt to emulate/recreate a pseudo-<code>&lt;select&gt;</code>, just tucks it away to use behind the scenes</li>
+					<li>All keyboard functionality/accessibility remains intact</li>
+					<li>Passes updates from visitor's mouse selections back to original element</li>
+					<li>Retrieves current state from original element upon any change</li>
 				</ul>
 			</dd>
-			<dt>Fancy Options</dt>
-				<dd>Create custom, full HTML <code>option</code> labels using an html5 data-* attribute</dd>
+
+			<dt>Activate and customize it however you want</dt>
+			<dd>Via HTML5 data-* attribute
+				<ul>
+					<li><code>&lt;select data-selectron&gt;</code></li>
+					<li><code>&lt;select data-selectron='{"inheritWidth": true, "classes": "someClass tier1 etcetera"}'&gt;</code></li>
+				</ul></dd>
+			<dd>
+				Via JavaScript on either <code>&lt;select&gt;</code> elements directly or a container element
+				<ul>
+					<li><code>$("body").selectron();</code></li>
+					<li><code>$("select").selectron();</code></li>
+					<li><code>$("select.special").selectron({
+    autoWidth: false,
+    showCallback: function(){
+        /* do stuff after a list finishes its show animation */
+    }
+});</code></li>
+				</ul></dd>
+
+			<dt>Customizable</dt>
+			<dd>
+				Generates robust HTML with plenty of elements and class names</dd>
+			<dd>
+				Can automatically size itself based on original select width, fit to best width for its contents, or neither
+			</dd>
+			<dd>
+				Can specify additional classes for further targeted CSS
+			</dd>
+			<dt>Full HTML <code>&lt;option&gt;</code> labels</dt>
+				<dd>Using an html5 data-* attribute (<code>data-label</code>)</dd>
 			<dt>Lightweight</dt>
 			<dd>
-				Packs down to less than 5KB</dd>
+				Packs down to less than 9KB before gzip</dd>
 			<dd>
-				Doesn't (currently) handle:
+				Doesn't currently support:
 				<ul>
 					<li>OptGroups</li>
 					<li>Multi-Select</li>
-					<li>Advanced Page/Mouse Scrolling Options</li>
+					<li>Advanced Page/Mouse Scrolling Options (no option to close lists on scroll like default <code>&lt;select&gt;</code> behavior - only break from default behavior)</li>
 				</ul>
 			</dd>
 		</dl>
@@ -105,9 +120,9 @@
 		<h2 id="advancedUsage">
 			Advanced Usage</h2>
 		<h3 id="selectOptions">
-			<code>select</code> Options</h3>
+			<code>&lt;select&gt;</code> Options</h3>
 		<p>
-			Currently all options except one, <code>delegate</code>, are related to animation. Selectron uses 
+			Most options are related to animation. Selectron uses 
 			the <a href="http://api.jquery.com/animate/#animate-properties-options">second
 			variation on the jQuery API page</a>.</p>
 			<p>Here is the default options object for each Selectron:</p>
@@ -131,7 +146,7 @@
 			<dd>
 				Selectron uses delegation for event capturing. <code>delegate</code> specifies a
 				container in which to track the relevant events. This allows for an additional way
-				to target <code>select</code>s.</dd>
+				to target <code>&lt;select&gt;</code>s.</dd>
 			<dd>
 				Additionally, <a href="http://api.jquery.com/on/#event-performance">the smaller the
 					area being watched for events, the faster the plugin performs</a></dd>
@@ -166,9 +181,9 @@
 		</dl>
 
 		<h3 id="optionOptions">
-			<code>option</code> Options</h3>
+			<code>&lt;option&gt;</code> Options</h3>
 			
-		<p>Each <code>option</code> in a <code>select</code> can be given a different label via the custom <code>data-label</code> attribute.
+		<p>Each <code>&lt;option&gt;</code> in a <code>&lt;select&gt;</code> can be given a different label via the custom <code>data-label</code> attribute.
 			This supports full html with no restrictions, so images and anything else can be used.</p>
 		<p>For example: <code>&lt;option value="03" data-label="&lt;img src='jolly-roger.gif' /&gt; Pirates!"&gt;Pirates!&lt;/option&gt;</code></p>
 	
@@ -176,7 +191,7 @@
 
 		<h3 id="optionListBehavior">Option List Behavior</h3>
 		
-		<p>Selectron Option Lists are designed to emulate the native <code>select</code> behavior as closely as possible</p>
+		<p>Selectron Option Lists are designed to emulate the native <code>&lt;select&gt;</code> behavior as closely as possible</p>
 
 		<p>All Selectron event handlers are namespaced with ".selectron", e.g. "<code>click.selectron</code>".</p>
 		
@@ -192,8 +207,8 @@
 
 			<dt>Collapse List</dt>
 			<dd>Mouse: Clicking on an option. It collapses on the "<code>click</code>" event.</dd>
-			<dd>Keyboard: The three methods of closing a standard <code>select</code> control still apply. Mimicking the default
-				behavior, the last <code>option</code> selected, whether changed via keyboard or unchanged, remains selected.
+			<dd>Keyboard: The three methods of closing a standard <code>&lt;select&gt;</code> control still apply. Mimicking the default
+				behavior, the last <code>&lt;option&gt;</code> selected, whether changed via keyboard or unchanged, remains selected.
 				<ul>
 					<li><code>Enter</code> - <code>keydown</code> event</li>
 					<li><code>Esc</code> - <code>keydown</code> event</li>
@@ -217,23 +232,23 @@
 
 		<p>By default, the primary Selectron <code>span</code> element only has the one class: <code>selectron</code>. To track various 
 			states of the select/selectron, additional classes are applied to <code>span.selectron</code> to reflect the various states 
-			of both the Selectron options list and the original <code>select</code> control itself.</p>
+			of both the Selectron options list and the original <code>&lt;select&gt;</code> control itself.</p>
 
-		<h4 id="interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>select</code> States</h4>
+		<h4 id="interactivityStyleActiveAndInactiveSelectStates">Interactivity Style: Active and Inactive <code>&lt;select&gt;</code> States</h4>
 		
-		<p>When a Selectron replaces a <code>select</code> control, it's not really a replacement: it's just a new front-end. 
-			The Selectron's job is purely to look pretty and communicate between the user and the original <code>select</code> element.</p>
+		<p>When a Selectron replaces a <code>&lt;select&gt;</code> control, it's not really a replacement: it's just a new front-end. 
+			The Selectron's job is purely to look pretty and communicate between the user and the original <code>&lt;select&gt;</code> element.</p>
 
-		<p>To this end, a Selectron appears active when its underlying <code>select</code> is active, and back to inactive 
+		<p>To this end, a Selectron appears active when its underlying <code>&lt;select&gt;</code> is active, and back to inactive 
 			when the user focuses away.</p>
 		
 		<dl>
-			<dt>Original <code>select</code> State: Active</dt>
-			<dd>When a <code>select</code> is made active, either by tabbing to it or clicking on its Selectron, 
+			<dt>Original <code>&lt;select&gt;</code> State: Active</dt>
+			<dd>When a <code>&lt;select&gt;</code> is made active, either by tabbing to it or clicking on its Selectron, 
 				the class "<code>selectronFocused</code>" is applied to its <code>span.selectron</code>.</dd>
 			
-			<dt>Original <code>select</code> State: Inactive</dt>
-			<dd>No special classes are applied to a <code>span.selectron</code> when its <code>select</code> is inactive</dd>
+			<dt>Original <code>&lt;select&gt;</code> State: Inactive</dt>
+			<dd>No special classes are applied to a <code>span.selectron</code> when its <code>&lt;select&gt;</code> is inactive</dd>
 		</dl>
 
 		<h4 id="interactivityStyleListVisibilityStates">Interactivity Style: List Visibility States</h4>
@@ -257,42 +272,54 @@
 
 		<h3 id="animationCallbacksAndListStateActionOrder">Animation Callbacks and List State Action Order</h3>
 
-		<p>Hiding or showing a list fires a series of actions, some before and some after the animation.</p>
+		<p>Hiding or showing a list fires a series of actions. <small>*Items marked with an asterisk do not occur when "cssAnimationOnly" is set</small></p>
 
 		<dl>
-			<dt>Showing &mdash; Before Animation</dt>
+			<dt>Showing</dt>
 			<dd>
-				<ol>
-					<li>Remove any "<code>shown</code>" or "<code>hiding</code>" class</li>
-					<li>Add "<code>showing</code>" class</li>
-					<li>Immediately show the style-only "<code>div.selectronListWrapper > div</code>" bridge element</li>
-				</ol>
+				<ul>
+					<li>Before Animation
+						<ol>
+							<li>Stop any animation running on selectron</li>
+							<li>Remove "<code>selectron--hiding</code>" class</li>
+							<li>Run preShow() function if specified</li>
+						</ol>
+					</li>
+					<li>Animate
+						<ol>
+							<li>Add "<code>selectron--showing</code>" and "<code>selectron--shown</code>" classes</li>
+							<li>Run showAnimation() function*</li>
+						</ol>
+					</li>
+					<li>After Animation
+						<ol>
+							<li>Remove "selectron--showing" class</li>
+							<li>Run showCallback() function</li>
+						</ol></li>
+				</ul>
 			</dd>
 
 			<dt>Showing &mdash; Callback</dt>
 			<dd>
 				<ol>
-					<li>Fix IE7 clearfix bug by removing "filter" css property</li>
-					<li>Remove "<code>showing</code>" class, Add "<code>shown</code>" class</li>
-					<li>Callback function from the Selectron options object</li>
+					<li>Remove "<code>selectron--showing</code>" class</li>
+					<li>Run showCallback() function</li>
 				</ol>
 			</dd>
 
 			<dt>Hiding &mdash; Before Animation</dt>
 			<dd>
 				<ol>
-					<li>Remove any "<code>shown</code>" or "<code>showing</code>" class</li>
-					<li>Add "<code>hiding</code>" class</li>
+					<li>Remove "<code>selectron--showing</code>" class</li>
+					<li>Add "<code>selectron--hiding</code>" class</li>
 				</ol>
 			</dd>
 
 			<dt>Hiding &mdash; Animation Callback</dt>
 			<dd>
 				<ol>
-					<li>Remove "<code>shown</code>" or "<code>hiding</code>" class<br />
-						(<code>shown</code> class removal was a brute force bug fix. May revisit.)</li>
-					<li>Hide the style-only "<code>div.selectronListWrapper > div</code>" bridge element</li>
-					<li>Callback function from the Selectron options object</li>
+					<li>Remove "<code>selectron--shown</code>" and "<code>selectron--hiding</code>" classes</li>
+					<li>Run hideCallback() function</li>
 				</ol>
 			</dd>
 		</dl>
@@ -301,48 +328,163 @@
 
 	<form action="#">
 		<h2 id="demo">
-			Demo
+			Examples
 		</h2>
-		<p>
-			The fancy select replacement emulates the original select's display and position
-			properties.</p>
-		<p>
-			By default, those are display:inline-block and position:static.
-			<select name="account">
-				<option value="1">Select Account</option>
-				<option value="2" data-label="<img width='40' height='32' src='http://www.iconbazaar.com/flags/animated/miscellaneous/jolly_roger_a3a.gif' /> Anuity">Anuity</option>
-				<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
-				<option value="4">Insurance</option>
-				<option value="5">Life Insurance</option>
-				<option>Mortgage</option>
-				<option>Mutual Funds</option>
-				<option>Retirement Plans</option>
-			</select>
-			<!--
-			* For durations, be sure not to use quotes unless you're also adding a unit of measurement
-			-->
-			<select name="otherSelect" data-sel-options='{ "showAnimation" : {"opacity" : "show" }, "hideAnimation" : {"opacity" : "hide" }, "hideDuration" : 600, "showDuration" : 200 }'>
-				<option value="1">Select Account</option>
-				<option value="2">Anuity</option>
-				<option value="3">Banking</option>
-				<option value="4">Insurance</option>
-				<option value="5">Life Insurance</option>
-				<option selected="selected">Mortgage</option>
-				<option>Mutual Funds</option>
-				<option>Retirement Plans</option>
-			</select>
-		</p>
-
-		<h2>
-			Original <code>select</code> controls, here for kicks!</h2>
-		<div id="holder">
-		</div>
+		<h3>Here are a couple Selects, activated by explicit JS on parent container</h3><h4><code>$("#aCoupleSelects").selectron();</code></h4>
+		<ul id="aCoupleSelects">
+			<li>Default <select name="account">
+					<option value="1">It's Time... To Select Account</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+			<li>
+			<p>Updated explicitly after initial activation, with options</p>
+			<p><code>$("select[name='accountSpecial']").selectron({
+	showAnimation: {
+		"opacity": 1,
+		"height": "show"
+	},
+	showDuration: 900,
+	hideAnimation: {
+		"opacity": 0,
+		"height": "hide"
+	},
+	hideDuration: 1000,
+	listStyle: "opacity: 0;"
+});</code></p>
+				<select name="accountSpecial">
+					<option value="1">Select Account</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+		</ul>
+		<h3>Additional <code>&lt;select&gt;</code>s, activated through HTML5 attribute "<code>data-selectron</code></h3>
+		<h4><code>&lt;select name="uniqueName" data-selectron='{{options}}'&gt;...</code></h4>
+		<ul>
+			<li>Default<br />
+<code>&lt;select name="account2" data-selectron&gt;</code><br />
+				<select name="account2" data-selectron>
+					<option value="1">Select Account 2</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+			<li>Custom animation settings<br />
+<code>&lt;select name="otherSelect" data-selectron='{ "showAnimation" : {"opacity" : "show" }, "hideAnimation" : {"opacity" : "hide" }, "hideDuration" : 600, "showDuration" : 200 }'&gt;</code><br />
+				<select name="otherSelect" data-selectron='{ "showAnimation" : {"opacity" : "show" }, "hideAnimation" : {"opacity" : "hide" }, "hideDuration" : 600, "showDuration" : 200 }'>
+					<option value="1">Select Account</option>
+					<option value="2">Anuity</option>
+					<option value="3">Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option selected="selected">Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+			<li>CSS Animation only<br />
+<code>&lt;select name="account3" data-selectron='{"cssAnimationOnly": true, "classes": "selectransitioner"}'&gt;</code><br />
+				<select name="account3" data-selectron='{"cssAnimationOnly": true, "classes": "selectransitioner"}'>
+					<option value="1">Select Account 3</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+			<li>Inherit Width from <code>&lt;select&gt;</code>
+<code>&lt;select name="account4" data-selectron='{"inheritWidth": true}'&gt;</code><br />
+				<select name="account4" data-selectron='{"inheritWidth": true}'>
+					<option value="1">Auto!</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+			<li>Inherit Width again, this time with specified width on <code>&lt;select&gt;</code><br />
+<code>&lt;select name="account5" data-selectron='{"inheritWidth": true}' style="width: 250px;"&gt;</code><br />
+				<select name="account5" data-selectron='{"inheritWidth": true}' style="width: 250px;">
+					<option value="1">SELECT! Inherit Width</option>
+					<option value="2">Anuity</option>
+					<option value="3" data-label='<div style="font-family:Comic Sans MS; float:left;">Ban</div><div style="font-family:Comic Sans MS; float:right">king</div>'>Banking</option>
+					<option value="4">Insurance</option>
+					<option value="5">Life Insurance</option>
+					<option>Mortgage</option>
+					<option>Mutual Funds</option>
+					<option>Retirement Plans</option>
+				</select>
+			</li>
+		</ul>
 	</form>
+	<a id="debugActivate" href="#">Show Debug Info</a>
+	<div id="debugContainer">
+		<h2>
+			Original <code>&lt;select&gt;</code> controls, here for kicks!</h2>
+		<div id="holder"></div>
 
-	<div id="debug">
-	</div>
+		<h4 id="debug1Label">Namespaced Select/Selectron events (<code>"[event].selectron"</code>)</h4>
+		<div id="debug"></div>
 
-	<div id="debug2">
+		<h4 id="debug2Label">All Select/Selectron events (<code>"[event]"</code>)</h4>
+		<div id="debug2"></div>
 	</div>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="selectron.js"></script>
+	<script type="text/javascript">
+	$(function () {
+		$("#aCoupleSelects").selectron();
+		$("select[name='accountSpecial']").selectron({
+			showAnimation: {
+				"opacity": 1,
+				"height": "show"
+			},
+			showDuration: 900,
+			hideAnimation: {
+				"opacity": 0,
+				"height": "hide"
+			},
+			hideDuration: 1000,
+			listStyle: "opacity: 0;"
+		});
+	});
+	
+	// Debug Helper
+	$(function(){
+		$("#debugActivate").on("click", function(e){
+			console.log("i'm getting the JS!");
+			var $link = $(this);
+			e.preventDefault();
+			$.getScript("demo.js", function(){
+				console.log("i got the JS!");
+				$link.remove();
+				$("#debugContainer").css("display", "block");
+			});
+		});
+	});
+	</script>
 </body>
 </html>

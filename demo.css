@@ -110,21 +110,47 @@ div.readme
 	margin:15px;
 }
 
+code {
+	display: inline-block;
+	max-width: 100%;
+	overflow-x: auto;
+	vertical-align: middle;
+}
+
+#debugContainer {
+	position: relative;
+	display: none;
+	width: 1024px;
+	margin: 0 auto;
+}
+
 #holder
 {
-	margin-left:250px;
+	width: 200px;
+	margin:0 auto;
 	position:relative;
 }
 
+#debug1Label,
+#debug2Label {
+	position: absolute;
+	top: 30px;
+}
+
+#debug2Label {
+	right: 0;
+}
 #debug,
 #debug2 {
 	height:450px;
 	width:400px;
 	overflow:auto;
 	float:left;
+	margin-top:50px;
 }
 
-#debug2 {
+#debug2,
+#debug2Label {
 	float:right;
 }
 

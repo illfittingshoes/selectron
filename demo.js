@@ -4,10 +4,9 @@
 		oldkeeper2 = 0;
 
 	var selectronLog = function (message, debugWindow) {
-		var $dBug = (debugWindow ? $("#" + debugWindow) : $("#debug")),
-			isDebug2 = (debugWindow ? true : false),
+		var isDebug2 = (debugWindow ? true : false),
+			$dBug = (isDebug2 ? $("#" + debugWindow) : $("#debug")),
 			curKeeper = new Date().getTime();
-
 
 		if ($dBug.length < 1) {
 			$("body").append("<div id=\"" + debugWindow + "\"></div>");
@@ -36,7 +35,13 @@
 		$("#holder").append($("select"));
 		$selects = $("select");
 		$($selects).css("left", "0");
-		$($selects[1]).css("top", "50px");
+		$($selects[0]).css("top", "50px");
+		$($selects[1]).css("top", "100px");
+		$($selects[2]).css("top", "150px");
+		$($selects[3]).css("top", "200px");
+		$($selects[4]).css("top", "250px");
+		$($selects[5]).css("top", "250px");
+		$($selects[6]).css("top", "300px");
 		//$("#holder").append($("select").css("opacity", "0.01"));
 
 		// test events
