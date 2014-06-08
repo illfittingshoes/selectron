@@ -90,19 +90,18 @@
 			/*! some styles */
 		&__inner
 			/*! some styles */
-	
-	&--focused .selectron__selected
-		background:#f9f9f9
-	&--shown .selectron__selected
-	&--hiding .selectron__selected
-		border-radius:5px 5px 0 0
-		border-bottom: none
-	&--shown .selectron__selected__inner
-		/*! some styles */
-	&--hiding .selectron__selected__inner
-		/*! some styles */
-	&--showing .selectron__selected__inner
-		/*! some styles */
+			/.selectron--shown &
+				/*! some styles */
+			/.selectron--hiding &
+				/*! some styles */
+			/.selectron--showing &
+				/*! some styles */
+		/.selectron--focused &
+			background:#f9f9f9
+		/.selectron--shown &
+		/.selectron--hiding &
+			border-radius:5px 5px 0 0
+			border-bottom: none
 	&__listWrapper:before
 		background:#fff
 		border-left:1px solid #e7e7e7
@@ -110,8 +109,8 @@
 		height:5px
 		top:-5px
 		width:100%
-	&--focused .selectron__listWrapper::before
-		background:#f9f9f9
+		/.selectron--focused &
+			background:#f9f9f9
 	&__list
 		display: none
 		background: #fff
@@ -128,10 +127,10 @@
 			border-top: 1px solid #e7e7e7
 		&__inner
 			padding: 10px 10px
-		&:hover .selectron__li__inner
-			background: #F9F9F9
-		&--selected .selectron__li__inner
-			background: #EEE
+			/.selectron__li:hover &
+				background: #F9F9F9
+			/.selectron__li--selected &
+				background: #EEE
 
 /*!****************************/
 /*! End Selectron Theme Styles */
